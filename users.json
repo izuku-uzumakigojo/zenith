@@ -1,0 +1,150 @@
+{
+  "Shooter": {
+    "username": "Shooter",
+    "password": "2013",
+    "level": 2,
+    "xp": 26,
+    "streak": 1,
+    "lastQuestDate": "Tue Aug 11 2026",
+    "currentQuest": "[QUEST BRIEFING]: Precision Shooting & Dribble Controls\n- 50 Form Shooting Makes (Swishes inside paint)\n- 50 Catch-and-Shoot 3-Pointers\n- 100 Crossover & Behind-the-Back Combo Dribbles\n- 4x30s Stationary Two-Ball Dribble Burnout\n- 25 Free Throws",
+    "statPoints": 6,
+    "stats": {
+      "str": 10,
+      "agi": 10,
+      "end": 10,
+      "sho": 10,
+      "drb": 10,
+      "jmp": 10
+    },
+    "dailyQuest": "[DAY 4/14] Splash Range 3PT & Form Precision\n- 37 Form Shooting Swishes inside paint\n- 37 Catch-and-Shoot 3-Pointers\n- 23 Crossover to Pull-Up Jumpers\n- 19 Consecutive Free Throws",
+    "activeWorkouts": [
+      {
+        "id": "curry_3pt",
+        "title": "Splash Range 3PT & Form Precision",
+        "mentor": "Steph Curry",
+        "category": "Shooting",
+        "currentDay": 4,
+        "totalDays": 14,
+        "baseTasks": [
+          {
+            "name": "Form Shooting Swishes inside paint",
+            "baseReps": 40
+          },
+          {
+            "name": "Catch-and-Shoot 3-Pointers",
+            "baseReps": 40
+          },
+          {
+            "name": "Crossover to Pull-Up Jumpers",
+            "baseReps": 25
+          },
+          {
+            "name": "Consecutive Free Throws",
+            "baseReps": 20
+          }
+        ]
+      },
+      {
+        "id": "lebron_power",
+        "title": "King's Rim Attack & Explosive Power",
+        "mentor": "LeBron James",
+        "category": "Vertical & Power",
+        "currentDay": 4,
+        "totalDays": 14,
+        "baseTasks": [
+          {
+            "name": "Depth Jumps into Max Vertical Jumps",
+            "baseReps": 30
+          },
+          {
+            "name": "Heavy Rim Attack Layups",
+            "baseReps": 30
+          },
+          {
+            "name": "Bulgarian Split Squats (Each leg)",
+            "baseReps": 25
+          },
+          {
+            "name": "Suicide Sprint Shuttle Runs (Reps)",
+            "baseReps": 4
+          }
+        ]
+      },
+      {
+        "id": "kyrie_handles",
+        "title": "Ankle-Breaker Dribble Matrix",
+        "mentor": "Kyrie Irving",
+        "category": "Ball Handling",
+        "currentDay": 2,
+        "totalDays": 14,
+        "baseTasks": [
+          {
+            "name": "Heavy Ball / Tennis Ball Toss Crossovers",
+            "baseReps": 80
+          },
+          {
+            "name": "In-and-Out Hesitation Drive Layups",
+            "baseReps": 35
+          },
+          {
+            "name": "Low-Pound Shifty Dribble Series (Seconds)",
+            "baseReps": 120
+          },
+          {
+            "name": "Tear-Drop Floaters over high contest",
+            "baseReps": 25
+          }
+        ]
+      }
+    ],
+    "age": 10,
+    "height": "",
+    "weight": ""
+  },
+  "killer": {
+    "username": "killer",
+    "password": "2013",
+    "level": 3,
+    "xp": 172,
+    "streak": 1,
+    "lastQuestDate": "Sun Aug 23 2026",
+    "currentQuest": "[ESSENTIAL CONDITIONING] Tailored for \"Plyometrics\": Bodyweight Scaled\n- 100 Push-ups\n- 100 Sit-ups\n- 100 Bodyweight Squats\n- 10km Run (or 30 mins High-Intensity Basketball Conditioning)\n- 50 Vertical Box Jumps",
+    "statPoints": 9,
+    "stats": {
+      "str": 10,
+      "agi": 10,
+      "end": 10,
+      "sho": 10,
+      "drb": 10,
+      "jmp": 10
+    },
+    "dailyQuest": null,
+    "activeWorkouts": [
+      {
+        "id": "full_body_conditioning",
+        "title": "Full Body Conditioning & Stamina",
+        "mentor": "Izuku Midoriya",
+        "category": "Full Body",
+        "currentDay": 1,
+        "totalDays": 14
+      },
+      {
+        "id": "shooting_accuracy",
+        "title": "Shooting Accuracy & Free Throw Precision",
+        "mentor": "Kakashi Hatake",
+        "category": "Shooting",
+        "currentDay": 1,
+        "totalDays": 14
+      }
+    ],
+    "age": 52,
+    "height": "5\"7",
+    "weight": "127",
+    "activeTitle": "E-Rank Trainee",
+    "unlockedTitles": [
+      "t_novice",
+      "t_iron"
+    ],
+    "dungeonGatesCleared": 1
+  }
+}

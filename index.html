@@ -1,0 +1,1934 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShonenSweat</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #030712;
+            --panel-bg: rgba(10, 15, 29, 0.92);
+            --cyan-glow: #00f0ff;
+            --blue-glow: #3b82f6;
+            --blue-bright: #60a5fa;
+            --blue-dark: #1e3a8a;
+            --gold-glow: #fbbf24;
+            --text-primary: #f0f9ff;
+            --text-muted: #94a3b8;
+            --border-neon: rgba(59, 130, 246, 0.5);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(circle at 15% 20%, rgba(59, 130, 246, 0.18) 0%, transparent 45%),
+                radial-gradient(circle at 85% 80%, rgba(0, 240, 255, 0.18) 0%, transparent 45%);
+            color: var(--text-primary);
+            font-family: 'Rajdhani', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* Glassmorphism Container */
+        .container {
+            width: 100%;
+            max-width: 720px;
+            background: var(--panel-bg);
+            backdrop-filter: blur(14px);
+            border: 2px solid var(--border-neon);
+            box-shadow: 0 0 30px rgba(0, 240, 255, 0.25), inset 0 0 20px rgba(30, 58, 138, 0.3);
+            border-radius: 14px;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+            display: none;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--cyan-glow), var(--blue-glow), transparent);
+        }
+
+        /* Auth Screen */
+        #auth-container {
+            display: block;
+            max-width: 440px;
+            text-align: center;
+        }
+
+        h1.system-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.3rem;
+            font-weight: 900;
+            color: var(--cyan-glow);
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            text-shadow: 0 0 12px rgba(0, 240, 255, 0.7), 0 0 25px rgba(59, 130, 246, 0.5);
+            margin-bottom: 4px;
+        }
+
+        .sub-header {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.95rem;
+            color: var(--blue-bright);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 25px;
+            text-shadow: 0 0 8px rgba(96, 165, 250, 0.5);
+        }
+
+        .input-group {
+            margin-bottom: 18px;
+            text-align: left;
+        }
+
+        .input-group label {
+            font-size: 0.85rem;
+            color: var(--cyan-glow);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+            display: block;
+            font-weight: 700;
+        }
+
+        input[type="text"], input[type="password"], textarea, select {
+            width: 100%;
+            background: rgba(3, 7, 18, 0.85);
+            color: var(--cyan-glow);
+            border: 1px solid rgba(59, 130, 246, 0.5);
+            border-radius: 6px;
+            padding: 12px 14px;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 600;
+            outline: none;
+            transition: all 0.25s ease;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            border-color: var(--cyan-glow);
+            box-shadow: 0 0 14px rgba(0, 240, 255, 0.4);
+        }
+
+        .btn {
+            width: 100%;
+            background: linear-gradient(135deg, rgba(0, 240, 255, 0.18), rgba(59, 130, 246, 0.25));
+            color: var(--cyan-glow);
+            border: 1px solid var(--cyan-glow);
+            border-radius: 6px;
+            padding: 13px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            margin-bottom: 12px;
+        }
+
+        .btn:hover {
+            background: linear-gradient(135deg, rgba(0, 240, 255, 0.35), rgba(59, 130, 246, 0.45));
+            box-shadow: 0 0 22px rgba(0, 240, 255, 0.6);
+            transform: translateY(-1px);
+        }
+
+        .btn-blue {
+            color: var(--blue-bright);
+            border-color: var(--blue-glow);
+            background: linear-gradient(135deg, rgba(30, 58, 138, 0.4), rgba(59, 130, 246, 0.3));
+        }
+        .btn-blue:hover {
+            box-shadow: 0 0 22px rgba(59, 130, 246, 0.6);
+        }
+
+        #auth-error {
+            color: #ef4444;
+            font-weight: 700;
+            margin-bottom: 15px;
+            min-height: 22px;
+            font-size: 0.95rem;
+            text-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
+        }
+
+        /* Streak EXP Banner */
+        .streak-banner {
+            background: linear-gradient(90deg, rgba(0, 240, 255, 0.15), rgba(59, 130, 246, 0.25));
+            border: 1px solid var(--cyan-glow);
+            border-radius: 8px;
+            padding: 10px 16px;
+            margin-bottom: 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.85rem;
+            color: var(--cyan-glow);
+            box-shadow: 0 0 12px rgba(0, 240, 255, 0.2);
+        }
+
+        /* Player Stats Panel */
+        .hud-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(3, 7, 18, 0.6);
+            border: 1px solid rgba(59, 130, 246, 0.4);
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin-bottom: 20px;
+        }
+
+        .player-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .rank-badge {
+            background: linear-gradient(135deg, #2563eb, #0284c7);
+            color: #fff;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            font-size: 0.8rem;
+            padding: 4px 10px;
+            border-radius: 4px;
+            letter-spacing: 1px;
+            box-shadow: 0 0 10px rgba(37, 99, 235, 0.6);
+        }
+
+        .player-name {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .level-badge {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--cyan-glow);
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .xp-container {
+            margin-bottom: 22px;
+        }
+
+        .xp-text {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+        }
+
+        .xp-bar-bg {
+            width: 100%;
+            height: 14px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid var(--cyan-glow);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: inset 0 0 5px #000;
+        }
+
+        .xp-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--cyan-glow), var(--blue-bright));
+            box-shadow: 0 0 12px var(--cyan-glow);
+            transition: width 0.4s ease-out;
+        }
+
+        /* Stat Points Section */
+        .stats-section {
+            background: rgba(3, 7, 18, 0.65);
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 22px;
+        }
+
+        .stats-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            color: var(--cyan-glow);
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+            border-bottom: 1px dashed rgba(0, 240, 255, 0.25);
+            padding-bottom: 8px;
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        @media (max-width: 540px) {
+            .stat-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        .stat-box {
+            background: rgba(30, 58, 138, 0.2);
+            border: 1px solid rgba(59, 130, 246, 0.35);
+            border-radius: 6px;
+            padding: 8px 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .stat-name {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-muted);
+        }
+
+        .stat-val-container {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .stat-val {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .btn-plus {
+            background: rgba(0, 240, 255, 0.25);
+            border: 1px solid var(--cyan-glow);
+            color: var(--cyan-glow);
+            width: 22px;
+            height: 22px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            line-height: 1;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.2s;
+        }
+        .btn-plus:hover {
+            background: var(--cyan-glow);
+            color: #000;
+        }
+
+        /* 2-Week Workout Program Graphic Cards Grid */
+        .cards-header {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.05rem;
+            color: var(--cyan-glow);
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px;
+            margin-bottom: 24px;
+        }
+
+        @media (max-width: 580px) {
+            .cards-grid { grid-template-columns: 1fr; }
+        }
+
+        .workout-card {
+            background: linear-gradient(145deg, rgba(10, 15, 29, 0.9), rgba(30, 58, 138, 0.3));
+            border: 1px solid rgba(59, 130, 246, 0.4);
+            border-radius: 10px;
+            padding: 16px;
+            position: relative;
+            transition: all 0.25s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .workout-card:hover {
+            border-color: var(--cyan-glow);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .card-active {
+            border: 2px solid var(--cyan-glow) !important;
+            box-shadow: 0 0 22px rgba(0, 240, 255, 0.4) !important;
+        }
+
+        .card-mentor-badge {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .card-avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: rgba(0, 240, 255, 0.15);
+            border: 1px solid var(--cyan-glow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+        }
+
+        .card-mentor-name {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--blue-bright);
+        }
+
+        .card-category {
+            font-size: 0.75rem;
+            color: var(--cyan-glow);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 700;
+        }
+
+        .card-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1rem;
+            color: #fff;
+            margin-bottom: 6px;
+            line-height: 1.3;
+        }
+
+        .card-meta {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        .card-duration-tag {
+            display: inline-block;
+            background: rgba(37, 99, 235, 0.3);
+            border: 1px solid var(--blue-glow);
+            color: var(--blue-bright);
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 4px;
+            margin-bottom: 12px;
+        }
+
+        .card-btn {
+            background: transparent;
+            border: 1px solid var(--cyan-glow);
+            color: var(--cyan-glow);
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            transition: 0.2s;
+            text-transform: uppercase;
+        }
+        .card-btn:hover {
+            background: rgba(0, 240, 255, 0.25);
+            box-shadow: 0 0 12px rgba(0, 240, 255, 0.4);
+        }
+
+        /* Active Enrolled Programs Dashboard */
+        .enrolled-panel {
+            background: rgba(3, 7, 18, 0.7);
+            border: 1px solid var(--blue-glow);
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 22px;
+        }
+
+        .enrolled-header {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.95rem;
+            color: var(--cyan-glow);
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .enrolled-item {
+            background: rgba(30, 58, 138, 0.25);
+            border: 1px solid rgba(59, 130, 246, 0.35);
+            border-radius: 6px;
+            padding: 10px 14px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .enrolled-name {
+            font-weight: 700;
+            color: #fff;
+            font-size: 0.95rem;
+        }
+
+        .enrolled-day {
+            font-size: 0.82rem;
+            color: var(--cyan-glow);
+            font-weight: 700;
+        }
+
+        /* Quest Display Box */
+        #quest-box {
+            background: rgba(3, 7, 18, 0.85);
+            border: 1px solid var(--border-neon);
+            border-radius: 8px;
+            padding: 20px;
+            min-height: 180px;
+            margin-bottom: 20px;
+        }
+
+        .quest-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.15rem;
+            color: var(--cyan-glow);
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+        }
+
+        .quest-desc {
+            font-style: italic;
+            color: var(--blue-bright);
+            font-size: 0.95rem;
+            margin-bottom: 16px;
+            line-height: 1.4;
+        }
+
+        .task-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .task-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(59, 130, 246, 0.25);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.25s ease;
+        }
+
+        .task-card:hover {
+            border-color: var(--cyan-glow);
+            background: rgba(0, 240, 255, 0.04);
+        }
+
+        .task-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 14px;
+            gap: 10px;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .task-item input[type="checkbox"] {
+            accent-color: var(--cyan-glow);
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .task-text {
+            font-size: 1.02rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .task-completed {
+            text-decoration: line-through;
+            color: #64748b;
+        }
+
+        .guide-toggle-btn {
+            background: rgba(0, 240, 255, 0.12);
+            border: 1px solid var(--cyan-glow);
+            color: var(--cyan-glow);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            letter-spacing: 0.5px;
+        }
+
+        .guide-toggle-btn:hover {
+            background: rgba(0, 240, 255, 0.3);
+            box-shadow: 0 0 10px rgba(0, 240, 255, 0.4);
+            transform: translateY(-1px);
+        }
+
+        .guide-toggle-btn.active {
+            background: var(--cyan-glow);
+            color: #030712;
+            box-shadow: 0 0 12px rgba(0, 240, 255, 0.6);
+        }
+
+        /* Collapsible Exercise Guide Panel */
+        .exercise-guide-panel {
+            background: rgba(3, 7, 18, 0.92);
+            border-top: 1px solid rgba(0, 240, 255, 0.2);
+            padding: 12px 16px;
+            font-size: 0.85rem;
+            line-height: 1.45;
+            animation: expandGuide 0.2s ease-out;
+        }
+
+        @keyframes expandGuide {
+            from { opacity: 0; transform: translateY(-4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .guide-header {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 900;
+            color: var(--cyan-glow);
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            text-shadow: 0 0 8px rgba(0, 240, 255, 0.5);
+        }
+
+        .guide-section {
+            margin-bottom: 6px;
+            color: var(--text-primary);
+        }
+
+        .guide-label {
+            color: var(--blue-bright);
+            font-weight: 700;
+            font-size: 0.82rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-right: 6px;
+        }
+
+        .guide-cues-list {
+            margin-top: 4px;
+            padding-left: 18px;
+            color: var(--text-muted);
+        }
+
+        .guide-cues-list li {
+            margin-bottom: 3px;
+        }
+        .guide-cues-list li strong {
+            color: var(--cyan-glow);
+        }
+
+        /* Rest Timer Widget */
+        .timer-widget {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(3, 7, 18, 0.6);
+            border: 1px dashed rgba(0, 240, 255, 0.35);
+            padding: 10px 16px;
+            border-radius: 6px;
+            margin-bottom: 18px;
+        }
+
+        .timer-display {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3rem;
+            color: var(--cyan-glow);
+            font-weight: 700;
+        }
+
+        .timer-btn {
+            background: transparent;
+            border: 1px solid var(--cyan-glow);
+            color: var(--cyan-glow);
+            padding: 5px 12px;
+            border-radius: 4px;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .timer-btn:hover { background: rgba(0, 240, 255, 0.25); }
+
+        /* Claim Rewards Button */
+        #claim-btn {
+            display: none;
+            background: linear-gradient(135deg, #0284c7, #2563eb);
+            color: #fff;
+            border: none;
+            font-size: 1.25rem;
+            padding: 16px;
+            border-radius: 8px;
+            box-shadow: 0 0 25px rgba(0, 240, 255, 0.7);
+            animation: pulseBlueGlow 1.6s infinite alternate;
+        }
+
+        @keyframes pulseBlueGlow {
+            from { box-shadow: 0 0 10px rgba(0, 240, 255, 0.5); transform: scale(1); }
+            to { box-shadow: 0 0 30px rgba(0, 240, 255, 0.9), 0 0 15px rgba(59, 130, 246, 0.7); transform: scale(1.02); }
+        }
+
+        /* ============================================================
+           Cyan System HUD Program Launch & 14-Day Modal (#program-launch-modal)
+           ============================================================ */
+        #program-launch-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(3, 7, 18, 0.88);
+            backdrop-filter: blur(12px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        #program-launch-modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--panel-bg);
+            border: 2px solid var(--cyan-glow);
+            border-radius: 12px;
+            box-shadow: 0 0 35px rgba(0, 240, 255, 0.4), inset 0 0 25px rgba(0, 240, 255, 0.1);
+            max-width: 680px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 24px;
+            position: relative;
+            color: var(--text-primary);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 1px solid rgba(0, 240, 255, 0.3);
+            padding-bottom: 14px;
+            margin-bottom: 18px;
+        }
+
+        .modal-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.25rem;
+            color: var(--cyan-glow);
+            text-shadow: 0 0 10px rgba(0, 240, 255, 0.6);
+            letter-spacing: 1px;
+        }
+
+        .modal-close-btn {
+            background: transparent;
+            border: 1px solid var(--border-neon);
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            cursor: pointer;
+            border-radius: 6px;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.2s;
+        }
+
+        .modal-close-btn:hover {
+            color: #ef4444;
+            border-color: #ef4444;
+        }
+
+        .modal-meta-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .modal-badge {
+            background: rgba(0, 240, 255, 0.12);
+            border: 1px solid var(--cyan-glow);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--cyan-glow);
+        }
+
+        .modal-progress-container {
+            background: rgba(3, 7, 18, 0.7);
+            border: 1px solid rgba(59, 130, 246, 0.4);
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin-bottom: 18px;
+        }
+
+        .modal-progress-header {
+            display: flex;
+            justify-content: space-between;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.85rem;
+            color: var(--blue-bright);
+            margin-bottom: 8px;
+        }
+
+        /* 14-Day Grid */
+        .days-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .days-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        .day-cell {
+            background: rgba(30, 58, 138, 0.2);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 6px;
+            padding: 10px 4px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .day-cell.unlocked {
+            border-color: var(--cyan-glow);
+            background: rgba(0, 240, 255, 0.1);
+            box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+        }
+
+        .day-cell.unlocked:hover {
+            background: rgba(0, 240, 255, 0.25);
+            box-shadow: 0 0 16px rgba(0, 240, 255, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .day-cell.completed {
+            border-color: #22c55e;
+            background: rgba(34, 197, 94, 0.15);
+            box-shadow: 0 0 8px rgba(34, 197, 94, 0.3);
+        }
+
+        .day-cell.locked {
+            opacity: 0.45;
+            cursor: not-allowed;
+            background: rgba(0, 0, 0, 0.4);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .day-cell-num {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .day-cell-status {
+            font-size: 0.68rem;
+            font-weight: 700;
+        }
+
+        .day-cell.completed .day-cell-status { color: #4ade80; }
+        .day-cell.unlocked .day-cell-status { color: var(--cyan-glow); }
+        .day-cell.locked .day-cell-status { color: var(--text-muted); }
+
+        /* ============================================================
+           Dungeon Gate Raid Panel
+           ============================================================ */
+        .dungeon-gate-panel {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(15, 23, 42, 0.9));
+            border: 1.5px solid rgba(239, 68, 68, 0.6);
+            border-radius: 10px;
+            padding: 14px 18px;
+            margin-bottom: 20px;
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.25), inset 0 0 15px rgba(239, 68, 68, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dungeon-gate-panel.gate-cleared {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.15), rgba(15, 23, 42, 0.9));
+            border-color: rgba(34, 197, 94, 0.7);
+            box-shadow: 0 0 20px rgba(34, 197, 94, 0.3);
+        }
+
+        .gate-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .gate-pulse-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #ef4444;
+            box-shadow: 0 0 10px #ef4444;
+            display: inline-block;
+            animation: pulseGateDot 1.2s infinite alternate;
+        }
+
+        .gate-cleared .gate-pulse-dot {
+            background: #22c55e;
+            box-shadow: 0 0 10px #22c55e;
+        }
+
+        @keyframes pulseGateDot {
+            from { transform: scale(0.85); opacity: 0.7; }
+            to { transform: scale(1.3); opacity: 1; }
+        }
+
+        .gate-type-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.92rem;
+            font-weight: 900;
+            color: #ef4444;
+            letter-spacing: 1px;
+            text-shadow: 0 0 8px rgba(239, 68, 68, 0.6);
+        }
+
+        .gate-cleared .gate-type-title {
+            color: #4ade80;
+            text-shadow: 0 0 8px rgba(74, 222, 128, 0.6);
+        }
+
+        .gate-surge-tag {
+            background: rgba(239, 68, 68, 0.25);
+            border: 1px solid #ef4444;
+            color: #fca5a5;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 4px;
+            letter-spacing: 1px;
+            animation: pulseGateTag 1.5s infinite alternate;
+        }
+
+        .gate-cleared .gate-surge-tag {
+            background: rgba(34, 197, 94, 0.25);
+            border-color: #22c55e;
+            color: #86efac;
+            animation: none;
+        }
+
+        @keyframes pulseGateTag {
+            from { box-shadow: 0 0 4px rgba(239, 68, 68, 0.4); }
+            to { box-shadow: 0 0 14px rgba(239, 68, 68, 0.9); }
+        }
+
+        .gate-body {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .gate-info-text {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .gate-timer-display {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 900;
+            color: #fbbf24;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(251, 191, 36, 0.7);
+        }
+
+        .gate-reward-text {
+            font-size: 0.84rem;
+            color: var(--text-muted);
+        }
+
+        /* ============================================================
+           Hunter Titles Styling
+           ============================================================ */
+        .hunter-title-tag {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--gold-glow);
+            letter-spacing: 1px;
+            background: rgba(251, 191, 36, 0.12);
+            border: 1px solid rgba(251, 191, 36, 0.4);
+            padding: 3px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            text-shadow: 0 0 8px rgba(251, 191, 36, 0.5);
+        }
+
+        .hunter-title-tag:hover {
+            border-color: var(--gold-glow);
+            background: rgba(251, 191, 36, 0.25);
+            box-shadow: 0 0 12px rgba(251, 191, 36, 0.4);
+            transform: translateY(-1px);
+        }
+
+        .title-select-btn {
+            background: transparent;
+            border: 1px solid var(--cyan-glow);
+            color: var(--cyan-glow);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.68rem;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .title-select-btn:hover {
+            background: rgba(0, 240, 255, 0.25);
+            box-shadow: 0 0 10px rgba(0, 240, 255, 0.4);
+        }
+
+        /* Titles Modal */
+        #titles-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: rgba(3, 7, 18, 0.9);
+            backdrop-filter: blur(12px);
+            z-index: 1050;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        #titles-modal.active { display: flex; }
+
+        .titles-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            max-height: 60vh;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        @media (max-width: 540px) {
+            .titles-grid { grid-template-columns: 1fr; }
+        }
+
+        .title-card {
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 8px;
+            padding: 12px;
+            position: relative;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .title-card.unlocked {
+            border-color: var(--cyan-glow);
+            background: rgba(0, 240, 255, 0.08);
+        }
+
+        .title-card.unlocked:hover {
+            background: rgba(0, 240, 255, 0.2);
+            box-shadow: 0 0 16px rgba(0, 240, 255, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .title-card.equipped {
+            border: 2px solid var(--gold-glow);
+            background: rgba(251, 191, 36, 0.15);
+            box-shadow: 0 0 16px rgba(251, 191, 36, 0.4);
+        }
+
+        .title-card.locked {
+            opacity: 0.5;
+            cursor: not-allowed;
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .title-name {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.92rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+
+        .title-unlocked .title-name { color: var(--cyan-glow); }
+        .title-equipped .title-name { color: var(--gold-glow); }
+
+        .title-desc {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            line-height: 1.3;
+        }
+
+        .title-status-tag {
+            display: inline-block;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.68rem;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-top: 6px;
+        }
+
+        .title-unlocked .title-status-tag {
+            background: rgba(0, 240, 255, 0.2);
+            color: var(--cyan-glow);
+        }
+
+        .title-equipped .title-status-tag {
+            background: rgba(251, 191, 36, 0.25);
+            color: var(--gold-glow);
+        }
+
+        .title-locked .title-status-tag {
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--text-muted);
+        }
+
+        /* ============================================================
+           Mana Multiplier & Voice Toggle
+           ============================================================ */
+        .mana-multiplier-badge {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.3), rgba(0, 240, 255, 0.2));
+            border: 1px solid #c084fc;
+            color: #e9d5ff;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 4px;
+            box-shadow: 0 0 10px rgba(168, 85, 247, 0.4);
+            margin-left: 8px;
+        }
+
+        .voice-btn {
+            background: rgba(0, 240, 255, 0.15);
+            border: 1px solid var(--cyan-glow);
+            color: var(--cyan-glow);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .voice-btn:hover {
+            background: rgba(0, 240, 255, 0.35);
+            box-shadow: 0 0 12px rgba(0, 240, 255, 0.5);
+        }
+
+        /* ============================================================
+           Holographic Coach Card & Speech Waveform
+           ============================================================ */
+        .hologram-coach-card {
+            background: linear-gradient(135deg, rgba(10, 25, 47, 0.95), rgba(15, 23, 42, 0.9));
+            border: 1.5px solid var(--cyan-glow);
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 18px;
+            box-shadow: 0 0 25px rgba(0, 240, 255, 0.3), inset 0 0 20px rgba(0, 240, 255, 0.08);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .scanlines-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(0, 240, 255, 0.04) 2px,
+                rgba(0, 240, 255, 0.04) 4px
+            );
+            pointer-events: none;
+        }
+
+        .coach-avatar-container {
+            position: relative;
+            width: 72px;
+            height: 72px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .coach-avatar-large {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: rgba(0, 240, 255, 0.15);
+            border: 2px solid var(--cyan-glow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.2rem;
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.5);
+            position: relative;
+            z-index: 2;
+        }
+
+        .coach-pulse-ring {
+            position: absolute;
+            top: 0; left: 0; width: 72px; height: 72px;
+            border-radius: 50%;
+            border: 1px dashed var(--cyan-glow);
+            animation: spinHoloRing 8s linear infinite;
+        }
+
+        @keyframes spinHoloRing {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .coach-details {
+            flex: 1;
+            position: relative;
+            z-index: 2;
+        }
+
+        .coach-holo-badge {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.65rem;
+            font-weight: 900;
+            color: var(--cyan-glow);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 2px;
+            text-shadow: 0 0 8px rgba(0, 240, 255, 0.6);
+        }
+
+        .coach-name {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 900;
+            color: #fff;
+            letter-spacing: 1px;
+            margin-bottom: 2px;
+        }
+
+        .coach-title {
+            font-size: 0.8rem;
+            color: var(--blue-bright);
+            margin-bottom: 6px;
+        }
+
+        .coach-quote-bubble {
+            background: rgba(0, 0, 0, 0.5);
+            border-left: 3px solid var(--cyan-glow);
+            padding: 8px 12px;
+            border-radius: 0 6px 6px 0;
+            font-size: 0.85rem;
+            font-style: italic;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .coach-speak-btn {
+            background: rgba(0, 240, 255, 0.2);
+            border: 1px solid var(--cyan-glow);
+            color: var(--cyan-glow);
+            font-size: 0.72rem;
+            padding: 3px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            flex-shrink: 0;
+            font-family: 'Orbitron', sans-serif;
+            transition: 0.2s;
+        }
+
+        .coach-speak-btn:hover {
+            background: var(--cyan-glow);
+            color: #000;
+        }
+
+        /* Equalizer Waveform */
+        .audio-wave-bars {
+            display: flex;
+            align-items: flex-end;
+            gap: 3px;
+            height: 12px;
+            opacity: 0.4;
+            transition: opacity 0.3s ease;
+        }
+
+        .audio-wave-bars.active {
+            opacity: 1;
+        }
+
+        .audio-wave-bars span {
+            width: 4px;
+            height: 4px;
+            background: var(--cyan-glow);
+            border-radius: 2px;
+            box-shadow: 0 0 6px var(--cyan-glow);
+        }
+
+        .audio-wave-bars.active span:nth-child(1) { animation: waveBar 0.8s ease-in-out infinite alternate; }
+        .audio-wave-bars.active span:nth-child(2) { animation: waveBar 0.6s ease-in-out 0.15s infinite alternate; }
+        .audio-wave-bars.active span:nth-child(3) { animation: waveBar 0.9s ease-in-out 0.3s infinite alternate; }
+        .audio-wave-bars.active span:nth-child(4) { animation: waveBar 0.7s ease-in-out 0.1s infinite alternate; }
+        .audio-wave-bars.active span:nth-child(5) { animation: waveBar 0.85s ease-in-out 0.25s infinite alternate; }
+
+        @keyframes waveBar {
+            from { height: 3px; }
+            to { height: 14px; }
+        }
+
+        /* ===== Hologram Coach Hub ===== */
+        .hologram-hub {
+            background: rgba(3, 7, 18, 0.6);
+            border: 1px solid var(--border-neon);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 22px;
+        }
+        .coach-select-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+        .coach-select-btn {
+            flex: 1;
+            background: rgba(30, 58, 138, 0.2);
+            border: 1px solid rgba(59, 130, 246, 0.35);
+            color: var(--text-muted);
+            padding: 8px 6px;
+            border-radius: 6px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .coach-select-btn.active, .coach-select-btn:hover {
+            border-color: var(--cyan-glow);
+            color: var(--cyan-glow);
+            box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+        }
+        .hologram-stage {
+            position: relative;
+            width: 100%;
+            max-width: 260px;
+            height: 260px;
+            margin: 0 auto;
+        }
+        #hologram-canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+        .hologram-scanline {
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--cyan-glow), transparent);
+            opacity: 0.6;
+            animation: hologramScan 3s linear infinite;
+            pointer-events: none;
+        }
+        @keyframes hologramScan {
+            0% { top: 0%; }
+            100% { top: 100%; }
+        }
+        .hologram-coach-label {
+            text-align: center;
+            margin-top: 4px;
+        }
+        .hologram-coach-label span#hologram-coach-name {
+            display: block;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            color: var(--cyan-glow);
+            font-size: 0.95rem;
+            letter-spacing: 1px;
+            text-shadow: 0 0 8px rgba(0, 240, 255, 0.5);
+        }
+        .hologram-coach-subtitle {
+            display: block;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+        .hologram-chat-log {
+            max-height: 160px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 10px;
+            padding-right: 4px;
+        }
+        .holo-msg {
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.88rem;
+            line-height: 1.35;
+            max-width: 85%;
+        }
+        .holo-msg-assistant {
+            background: rgba(0, 240, 255, 0.1);
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            color: var(--text-primary);
+            align-self: flex-start;
+        }
+        .holo-msg-user {
+            background: rgba(59, 130, 246, 0.2);
+            border: 1px solid rgba(59, 130, 246, 0.4);
+            color: #fff;
+            align-self: flex-end;
+        }
+        .hologram-chat-input-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+        .hologram-chat-input-row input {
+            flex: 1;
+        }
+        .hologram-chat-input-row button {
+            background: rgba(0, 240, 255, 0.2);
+            border: 1px solid var(--cyan-glow);
+            color: var(--cyan-glow);
+            padding: 0 16px;
+            border-radius: 6px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        .hologram-chat-input-row button:hover { background: rgba(0, 240, 255, 0.35); }
+        .hologram-chat-input-row button:disabled { opacity: 0.5; cursor: default; }
+        .scroll-down-btn {
+            width: 100%;
+            background: transparent;
+            border: 1px dashed rgba(0, 240, 255, 0.4);
+            color: var(--cyan-glow);
+            padding: 8px;
+            border-radius: 6px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.7rem;
+            letter-spacing: 1px;
+            cursor: pointer;
+        }
+        .scroll-down-btn:hover { background: rgba(0, 240, 255, 0.1); }
+    </style>
+</head>
+<body>
+
+    <!-- AUTHENTICATION SCREEN -->
+    <div class="container" id="auth-container">
+        <h1 class="system-title">Shonensweat</h1>
+        <div class="sub-header">Basketball  Workout System</div>
+
+        <div id="auth-error"></div>
+
+        <div class="input-group">
+            <label>PLAYER NAME</label>
+            <input type="text" id="username" placeholder="e.g. Shooter" autocomplete="off">
+        </div>
+
+        <div class="input-group">
+            <label>SYSTEM ACCESS CODE</label>
+            <input type="password" id="password" placeholder="••••••••">
+        </div>
+
+        <div style="display:flex; gap:10px;">
+            <div class="input-group" style="flex:1;">
+                <label>AGE (YEARS)*</label>
+                <input type="number" id="player-age" min="8" max="99" value="18" placeholder="18">
+            </div>
+            <div class="input-group" style="flex:1;">
+                <label>HEIGHT (OPTIONAL)</label>
+                <input type="text" id="player-height" placeholder="e.g. 6'1&quot;">
+            </div>
+            <div class="input-group" style="flex:1;">
+                <label>WEIGHT (OPTIONAL)</label>
+                <input type="text" id="player-weight" placeholder="e.g. 175 lbs">
+            </div>
+        </div>
+
+        <button class="btn" onclick="handleAuth('/api/login')">ENTER GATE (LOGIN)</button>
+        <button class="btn btn-blue" onclick="handleAuth('/api/signup')">AWAKEN SYSTEM (SIGN UP)</button>
+    </div>
+
+    <!-- MAIN APP HUD -->
+    <div class="container" id="main-app">
+        <h1 class="system-title">Shonensweat</h1>
+        <div class="sub-header">System Active • Player Workout System</div>
+
+        <!-- Hologram Coach Hub -->
+        <div class="hologram-hub">
+            <div class="coach-select-row">
+                <button class="coach-select-btn active" id="coach-btn-steph" onclick="selectHologramCoach('steph')">COACH SPLASH</button>
+                <button class="coach-select-btn" id="coach-btn-kobe" onclick="selectHologramCoach('kobe')">COACH MAMBA</button>
+                <button class="coach-select-btn" id="coach-btn-kyrie" onclick="selectHologramCoach('kyrie')">COACH HANDLES</button>
+            </div>
+
+            <div class="hologram-stage">
+                <canvas id="hologram-canvas"></canvas>
+                <div class="hologram-scanline"></div>
+            </div>
+
+            <div class="hologram-coach-label">
+                <span id="hologram-coach-name">COACH SPLASH</span>
+                <span class="hologram-coach-subtitle" id="hologram-coach-subtitle">Shooting specialist — precision &amp; footwork</span>
+            </div>
+
+            <div class="audio-wave-bars" id="hologram-audio-wave" style="margin: 6px auto 10px;">
+                <span></span><span></span><span></span><span></span><span></span>
+            </div>
+
+            <div class="hologram-chat-log" id="hologram-chat-log"></div>
+
+            <div class="hologram-chat-input-row">
+                <input type="text" id="hologram-chat-input" placeholder="Ask your coach about training..." onkeydown="handleHologramChatKey(event)">
+                <button id="hologram-send-btn" onclick="sendHologramChatMessage()">SEND</button>
+            </div>
+
+            <button class="scroll-down-btn" onclick="scrollToWorkouts()">▼ SCROLL TO TRAINING PROGRAMS ▼</button>
+        </div>
+
+        <!-- Daily Login Streak, Mana Multiplier & EXP Boost Banner -->
+        <div class="streak-banner">
+            <div>
+                <span>⚡ DAILY STREAK: <strong id="streak-count">1</strong> DAYS</span>
+                <span class="mana-multiplier-badge" id="mana-multiplier-display">🔮 MANA: 1.15x</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+                <span style="color:var(--gold-glow); font-weight:700; font-size:0.75rem;" id="aura-tier-display">🔵 AWAKENING AURA</span>
+                <button id="voice-toggle-btn" class="voice-btn" onclick="toggleVoiceAudio()" title="Toggle Hologram Coach Voice">🔊 VOICE: ON</button>
+            </div>
+        </div>
+
+        <!-- Dungeon Gate Raid Widget (Red Gate / Daily Dungeon Surge) -->
+        <div class="dungeon-gate-panel" id="dungeon-gate-widget">
+            <div class="gate-header">
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <span class="gate-pulse-dot" id="gate-pulse-dot"></span>
+                    <span class="gate-type-title" id="gate-type-display">🔴 S-RANK RED GATE (DAILY RAID)</span>
+                </div>
+                <span class="gate-surge-tag" id="gate-surge-tag">⚡ 2.0x XP SURGE ACTIVE</span>
+            </div>
+            <div class="gate-body">
+                <div class="gate-info-text">
+                    <span style="color:var(--text-muted);">GATE BREAK IN:</span>
+                    <span class="gate-timer-display" id="gate-countdown-text">--:--:--</span>
+                </div>
+                <div class="gate-reward-text" id="gate-status-text">
+                    Clear today's quest before Gate Break to claim 2x System XP Surge!
+                </div>
+            </div>
+        </div>
+
+        <!-- HUD Player Header with Hunter Title -->
+        <div class="hud-header">
+            <div>
+                <div class="player-info" style="margin-bottom:2px;">
+                    <span class="rank-badge" id="rank-display">E-RANK</span>
+                    <span class="player-name" id="player-name-display">PLAYER</span>
+                </div>
+                <!-- Unlockable Hunter Title Tag -->
+                <div style="display:flex; align-items:center; gap:6px; margin-bottom:4px;">
+                    <span class="hunter-title-tag" id="active-title-display" onclick="openTitlesModal()" title="Click to view & equip Hunter Titles">👑 [E-RANK TRAINEE]</span>
+                    <button class="title-select-btn" onclick="openTitlesModal()">TITLES</button>
+                </div>
+                <div style="font-size:0.82rem; color:var(--text-muted); display:flex; align-items:center; gap:8px;">
+                    <span id="biometrics-summary">AGE: 18</span>
+                    <button onclick="toggleBiometricsModal()" style="background:transparent; border:none; color:var(--cyan-glow); cursor:pointer; font-weight:bold; font-size:0.78rem;">✏️ EDIT BIOMETRICS</button>
+                </div>
+            </div>
+            <div style="text-align:right;">
+                <div class="level-badge">
+                    LVL <span id="lvl-display">1</span>
+                </div>
+                <span class="card-duration-tag" id="age-mode-tag" style="margin-bottom:0; font-size:0.7rem;">PEAK OVERLOAD</span>
+            </div>
+        </div>
+
+        <!-- Edit Biometrics Modal Panel -->
+        <div id="biometrics-modal" style="display:none; background:rgba(3,7,18,0.95); border:1px solid var(--cyan-glow); border-radius:8px; padding:16px; margin-bottom:20px;">
+            <div style="font-family:'Orbitron',sans-serif; color:var(--cyan-glow); font-size:0.95rem; font-weight:700; margin-bottom:10px; display:flex; justify-content:space-between;">
+                <span>✏️ UPDATE PHYSICAL BIOMETRICS</span>
+                <button onclick="toggleBiometricsModal()" style="background:transparent; border:none; color:var(--text-muted); cursor:pointer;">✖</button>
+            </div>
+            <div style="display:flex; gap:10px; margin-bottom:10px;">
+                <div class="input-group" style="flex:1; margin-bottom:0;">
+                    <label>AGE (YEARS)*</label>
+                    <input type="number" id="edit-age" min="8" max="99" value="18">
+                </div>
+                <div class="input-group" style="flex:1; margin-bottom:0;">
+                    <label>HEIGHT (OPTIONAL)</label>
+                    <input type="text" id="edit-height" placeholder="e.g. 6'1&quot;">
+                </div>
+                <div class="input-group" style="flex:1; margin-bottom:0;">
+                    <label>WEIGHT (OPTIONAL)</label>
+                    <input type="text" id="edit-weight" placeholder="e.g. 175 lbs">
+                </div>
+            </div>
+            <button class="btn" style="margin-bottom:0; padding:10px;" onclick="saveBiometrics()">SAVE BIOMETRICS</button>
+        </div>
+
+        <!-- XP Progress Bar -->
+        <div class="xp-container">
+            <div class="xp-text">
+                <span>System XP</span>
+                <span><span id="xp-display">0</span> / <span id="xp-max">100</span> XP</span>
+            </div>
+            <div class="xp-bar-bg">
+                <div class="xp-bar-fill" id="xp-bar"></div>
+            </div>
+        </div>
+
+        <!-- Player Stat Distribution Panel -->
+        <div class="stats-section">
+            <div class="stats-header">
+                <span>PLAYER ATTRIBUTES</span>
+                <span style="color:var(--gold-glow);">STAT POINTS: <strong id="stat-points-display">3</strong></span>
+            </div>
+            <div class="stat-grid">
+                <div class="stat-box">
+                    <span class="stat-name">STR</span>
+                    <div class="stat-val-container">
+                        <span class="stat-val" id="stat-str">10</span>
+                        <button class="btn-plus" onclick="addStatPoint('str')">+</button>
+                    </div>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-name">AGI</span>
+                    <div class="stat-val-container">
+                        <span class="stat-val" id="stat-agi">10</span>
+                        <button class="btn-plus" onclick="addStatPoint('agi')">+</button>
+                    </div>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-name">END</span>
+                    <div class="stat-val-container">
+                        <span class="stat-val" id="stat-end">10</span>
+                        <button class="btn-plus" onclick="addStatPoint('end')">+</button>
+                    </div>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-name">SHO (3PT)</span>
+                    <div class="stat-val-container">
+                        <span class="stat-val" id="stat-sho">10</span>
+                        <button class="btn-plus" onclick="addStatPoint('sho')">+</button>
+                    </div>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-name">DRB (HANDLES)</span>
+                    <div class="stat-val-container">
+                        <span class="stat-val" id="stat-drb">10</span>
+                        <button class="btn-plus" onclick="addStatPoint('drb')">+</button>
+                    </div>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-name">JMP (VERT)</span>
+                    <div class="stat-val-container">
+                        <span class="stat-val" id="stat-jmp">10</span>
+                        <button class="btn-plus" onclick="addStatPoint('jmp')">+</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Enrolled 2-Week Programs Summary -->
+        <div class="enrolled-panel" id="enrolled-dashboard">
+            <div class="enrolled-header">
+                <span>ENROLLED 2-WEEK WORKOUT PROGRAMS</span>
+                <span><span id="enrolled-count">0</span> / 3 ACTIVE</span>
+            </div>
+            <div id="enrolled-list" style="display:flex; flex-direction:column; gap:6px;">
+                <div style="color:var(--text-muted); font-size:0.88rem;">No active 2-week programs selected. Enroll in up to 3 programs below!</div>
+            </div>
+        </div>
+
+        <!-- 2-Week Workout Program Graphic Cards Section -->
+        <div class="cards-header">
+            <span>2-WEEK SPECIALIZED WORKOUT PROGRAMS</span>
+            <span style="font-size:0.8rem; color:var(--text-muted);">SELECT UP TO 3</span>
+        </div>
+
+        <div class="cards-grid" id="graphic-cards-container">
+            <!-- Graphic Cards dynamically generated -->
+        </div>
+
+        <!-- AI Text Prompt Generator Toggle & Box -->
+        <button class="btn btn-blue" style="margin-bottom: 12px;" onclick="togglePromptGenerator()">
+            ✨ AI TEXT WORKOUT & RECOVERY GENERATOR
+        </button>
+
+        <div id="prompt-generator-panel" style="display:none; background:rgba(3, 7, 18, 0.95); border:1px solid var(--cyan-glow); border-radius:10px; padding:20px; margin-bottom:22px; box-shadow:0 0 18px rgba(0, 240, 255, 0.3);">
+            <div style="font-family:'Orbitron',sans-serif; color:var(--cyan-glow); font-size:1.05rem; font-weight:700; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;">
+                <span>✨ GENERATE WORKOUT / RECOVERY FROM TEXT</span>
+                <button onclick="togglePromptGenerator()" style="background:transparent; border:none; color:var(--text-muted); cursor:pointer; font-size:1.2rem;">✖</button>
+            </div>
+            <div class="input-group">
+                <label>TYPE OR PASTE WORKOUT SPECIFICATIONS (e.g. "20 min shooting workout with free throws and knee recovery")</label>
+                <textarea id="prompt-input" rows="3" placeholder="e.g. I need an explosive vertical jump routine combined with ankle stability and hamstring stretching..."></textarea>
+            </div>
+            <button class="btn" onclick="generateFromTextPrompt()">
+                ⚡ GENERATE WORKOUT QUEST FROM TEXT
+            </button>
+        </div>
+
+        <!-- Custom Workout Creator Toggle -->
+        <button class="btn btn-blue" style="margin-bottom: 18px;" onclick="toggleCustomCreator()">
+            🛠️ MANUAL WORKOUT & RECOVERY CREATOR
+        </button>
+
+        <div id="custom-creator-panel" style="display:none; background:rgba(3, 7, 18, 0.95); border:1px solid var(--blue-glow); border-radius:10px; padding:20px; margin-bottom:22px; box-shadow:0 0 15px rgba(59, 130, 246, 0.3);">
+            <div style="font-family:'Orbitron',sans-serif; color:var(--blue-bright); font-size:1.05rem; font-weight:700; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center;">
+                <span>🛠️ MANUAL RECOVERY & SPECIALIZED WORKOUT CREATOR</span>
+                <button onclick="toggleCustomCreator()" style="background:transparent; border:none; color:var(--text-muted); cursor:pointer; font-size:1.2rem;">✖</button>
+            </div>
+
+            <div style="margin-bottom:15px;">
+                <label style="font-size:0.8rem; color:var(--cyan-glow); font-weight:700; display:block; margin-bottom:6px;">QUICK PRESETS:</label>
+                <div style="display:flex; flex-wrap:wrap; gap:8px;">
+                    <button class="timer-btn" onclick="loadPreset('mobility')">🧘 Active Mobility</button>
+                    <button class="timer-btn" onclick="loadPreset('prehab')">🦵 Ankle & Knee Prehab</button>
+                    <button class="timer-btn" onclick="loadPreset('shooting_touch')">🏀 Shooting Touch</button>
+                    <button class="timer-btn" onclick="loadPreset('cooldown')">🧊 Cool Down</button>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label>WORKOUT TITLE</label>
+                <input type="text" id="custom-title" placeholder="e.g. Post-Game Ankle Rehab & Light Touch">
+            </div>
+
+            <div class="input-group">
+                <label>BRIEFING / RECOVERY NOTES</label>
+                <input type="text" id="custom-desc" placeholder="e.g. Focus on joint decompression, mobility, and swelling reduction.">
+            </div>
+
+            <div class="input-group">
+                <label>EXERCISE TASKS & DRILLS</label>
+                <div id="custom-tasks-container" style="display:flex; flex-direction:column; gap:8px; margin-bottom:10px;">
+                    <!-- Dynamic Task Rows injected here -->
+                </div>
+                <button class="timer-btn" style="width:auto; padding:6px 14px;" onclick="addCustomTaskInput('')">+ Add Exercise Task</button>
+            </div>
+
+            <button class="btn" onclick="saveAndActivateCustomQuest()" style="margin-top:10px;">
+                ⚡ ACTIVATE & PERMANENTLY SAVE WORKOUT PROGRAM
+            </button>
+        </div>
+
+        <!-- Rest / Set Timer Widget -->
+        <div class="timer-widget">
+            <div>
+                <span style="font-size:0.85rem; color:var(--text-muted); font-weight:700;">REST TIMER:</span>
+                <span class="timer-display" id="timer-text">01:00</span>
+            </div>
+            <div style="display:flex; gap:8px;">
+                <button class="timer-btn" onclick="startTimer(45)">45s</button>
+                <button class="timer-btn" onclick="startTimer(60)">60s</button>
+                <button class="timer-btn" onclick="startTimer(90)">90s</button>
+                <button class="timer-btn" style="border-color:#ef4444; color:#ef4444;" onclick="resetTimer()">RESET</button>
+            </div>
+        </div>
+
+        <!-- Quest Display Container -->
+        <div id="quest-box">
+            <div style="color:var(--cyan-glow); text-align:center; padding:30px 0;">
+                [ System Synchronizing Daily Workout... ]
+            </div>
+        </div>
+
+        <button class="btn" id="claim-btn" onclick="claimRewards()">CLAIM SYSTEM REWARDS (+XP)</button>
+        <button class="btn" style="border-color:#334155; color:#94a3b8; margin-top:10px;" onclick="logout()">DISCONNECT SYSTEM (LOGOUT)</button>
+    </div>
+
+    <!-- SYSTEM HUD 14-DAY PROGRAM LAUNCH MODAL WITH HOLOGRAPHIC COACH -->
+    <div id="program-launch-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div>
+                    <div class="modal-title" id="modal-program-title">PROGRAM OVERLOAD MATRIX</div>
+                    <div style="font-size:0.85rem; color:var(--blue-bright); margin-top:4px;" id="modal-program-mentor">Steph Curry • Shooting Specialist</div>
+                </div>
+                <button class="modal-close-btn" onclick="closeProgramModal()" title="Close">✖</button>
+            </div>
+
+            <!-- Holographic Mentor Coach Card -->
+            <div class="hologram-coach-card" id="modal-coach-card">
+                <div class="scanlines-overlay"></div>
+                <div class="coach-avatar-container">
+                    <div class="coach-avatar-large" id="modal-coach-avatar">🏀</div>
+                    <div class="coach-pulse-ring"></div>
+                </div>
+                <div class="coach-details">
+                    <div class="coach-holo-badge">⚡ HOLOGRAPHIC COACH LINK ACTIVE</div>
+                    <div class="coach-name" id="modal-coach-name">STEPH CURRY</div>
+                    <div class="coach-title" id="modal-coach-subtitle">Shooting Specialist • Chef of the Arc</div>
+                    <div class="coach-quote-bubble">
+                        <span class="coach-quote-text" id="modal-coach-quote">"Lock in! Form and release are everything. Let's splash these shots!"</span>
+                        <button class="coach-speak-btn" onclick="speakCurrentCoachGreeting()" title="Replay Coach Voice">🔊 Speak</button>
+                    </div>
+                    <div class="audio-wave-bars" id="modal-audio-wave">
+                        <span></span><span></span><span></span><span></span><span></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-meta-row">
+                <span class="modal-badge" id="modal-program-rank">RANK: S-RANK</span>
+                <span class="modal-badge" id="modal-program-focus">FOCUS: 3PT Shooting & Precision</span>
+                <span class="modal-badge" id="modal-program-duration">DURATION: 14 DAYS</span>
+            </div>
+
+            <div class="modal-progress-container">
+                <div class="modal-progress-header">
+                    <span>14-DAY TRAINING PROGRESS</span>
+                    <span id="modal-progress-count">0 / 14 COMPLETED (0%)</span>
+                </div>
+                <div class="xp-bar-bg" style="height:10px;">
+                    <div class="xp-bar-fill" id="modal-progress-bar" style="width:0%;"></div>
+                </div>
+            </div>
+
+            <div style="font-family:'Orbitron',sans-serif; font-size:0.9rem; color:var(--cyan-glow); margin-bottom:10px;">
+                TRAINING SCHEDULE (SELECT UNLOCKED DAY):
+            </div>
+            <div class="days-grid" id="modal-days-grid">
+                <!-- 14 Day cells dynamically rendered -->
+            </div>
+
+            <div style="display:flex; gap:10px; margin-top:14px;">
+                <button class="btn" id="modal-primary-action-btn" onclick="launchCurrentModalProgramDay()" style="flex:2; margin-bottom:0;">
+                    ⚡ LAUNCH CURRENT DAY QUEST
+                </button>
+                <button class="btn btn-blue" id="modal-enroll-toggle-btn" onclick="toggleEnrollCurrentModalProgram()" style="flex:1; margin-bottom:0;">
+                    ENROLL
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- UNLOCKABLE HUNTER TITLES SHOWCASE MODAL -->
+    <div id="titles-modal">
+        <div class="modal-content" style="max-width: 620px;">
+            <div class="modal-header">
+                <div>
+                    <div class="modal-title">🏆 UNLOCKABLE HUNTER TITLES</div>
+                    <div style="font-size:0.85rem; color:var(--blue-bright); margin-top:4px;">Equip unlocked anime & ascension titles to your System HUD</div>
+                </div>
+                <button class="modal-close-btn" onclick="closeTitlesModal()" title="Close">✖</button>
+            </div>
+
+            <div style="margin-bottom:14px; font-size:0.88rem; color:var(--cyan-glow); font-weight:700;">
+                ACTIVE EQUIPPED TITLE: <span id="modal-active-title-label" style="color:#fff; text-shadow:0 0 10px var(--cyan-glow);">[E-RANK TRAINEE]</span>
+            </div>
+
+            <div class="titles-grid" id="titles-grid-container">
+                <!-- Dynamically generated Title Cards -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Three.js (hologram) — must load before app.js -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+    <!-- Main JavaScript Logic -->
+    <script src="app.js"></script>
+</body>
+</html>
